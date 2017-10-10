@@ -1430,7 +1430,6 @@ a:focus {
 }
 
 a:focus {
-  outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
 
@@ -3332,7 +3331,6 @@ select[size] {
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
-  outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
 
@@ -3987,7 +3985,6 @@ select[multiple].input-lg,
 .btn:active.focus,
 .btn.active:focus,
 .btn.active.focus {
-  outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
 
@@ -9450,5 +9447,49 @@ input[type="checkbox"]:disabled:checked:after,
 
 .mt-4 {
   margin-top: 4em;
+}
+
+.mr-0 {
+  margin-right: 0em;
+}
+
+.mr-1 {
+  margin-right: 3px;
+}
+
+.mr-2 {
+  margin-right: 6px;
+}
+
+.mr-3 {
+  margin-right: 9px;
+}
+
+.mr-4 {
+  margin-right: 12px;
+}
+
+.ml-0 {
+  margin-left: 0px;
+}
+
+.ml-1 {
+  margin-left: 3px;
+}
+
+.ml-2 {
+  margin-left: 6px;
+}
+
+.ml-3 {
+  margin-left: 9px;
+}
+
+.ml-4 {
+  margin-left: 12px;
+}
+
+.noutline {
+  outline: none !important;
 }
 

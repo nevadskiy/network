@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
-class ProfileController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +35,30 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'body' => 'required|max:255'
+        ]);
+
+        auth()->user()->posts()->create([
+            'body' => $request->body
+        ]);
+
+        return back();
+    }
+
+    public function storeReply(Request $request, Post $post)
+    {
+
+        $this->validate($request, [
+            'body' => 'required|max:255'
+        ]);
+
+        $post->replies()->create([
+            'body' => $request->body,
+            'user_id' => auth()->id()
+        ]);
+
+        return back();
     }
 
     /**
@@ -44,15 +67,9 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-//        return $user->posts()->withCount('likes')->notReply()->latest()->paginate(10);
-//        return user()
-
-        return view('profile.show', [
-            'user' => $user,
-            'posts' => $user->posts()->withCount('likes')->notReply()->latest()->paginate(10)
-        ]);
+        //
     }
 
     /**
@@ -61,11 +78,10 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit()
+    public function edit($id)
     {
-
+        //
     }
-
 
     /**
      * Update the specified resource in storage.
