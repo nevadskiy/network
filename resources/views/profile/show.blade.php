@@ -43,31 +43,32 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading"><a href="" class="btn btn-link"><strong>Posts: {{ $posts->total()  }}</strong></a></div>
-                    <div class="panel-body">
-                        @if($user->isMe())
-                            <form action="{{ route('post.store') }}" method="POST">
-                                {{ csrf_field() }}
-                                <div class="form-group">
-                                    <textarea name="body" rows="3" class="form-control" placeholder="What's new?"></textarea>
-                                </div>
-                                <button class="btn btn-primary">Post</button>
-                            </form>
-                        @endif
-                        <ul class="media-list">
-                            @forelse($posts as $post)
+               <posts inline-template>
+                   <div class="panel panel-default">
+                       <div class="panel-heading"><a href="" class="btn btn-link"><strong>Posts: {{ $posts->total()  }}</strong></a></div>
+                       <div class="panel-body">
+                           @if($user->isMe())
+                               <new-post @posted="add"></new-post>
+                           @endif
+                           <ul class="media-list">
+                               <div v-for="post in posts" :key="post.id">
                                 <hr>
-                                @include('posts._post')
-                            @empty
-                                <p>There are no posts by this user.</p>
-                            @endforelse
-                        </ul>
-                    </div>
-                </div>
-                <div class="text-center mt-0">
-                    {{ $posts->links() }}
-                </div>
+                                <post :item="post"></post>
+                            </div>
+                            <delete-post @deleted="remove" :post-item="modalDelete"></delete-post>
+                               {{--@forelse($posts as $post)--}}
+                                   {{--<hr>--}}
+                                   {{--@include('posts._post')--}}
+                               {{--@empty--}}
+                                   {{--<p>There are no posts by this user.</p>--}}
+                               {{--@endforelse--}}
+                           </ul>
+                       </div>
+                   </div>
+               </posts>
+                {{--<div class="text-center mt-0">--}}
+                {{--{{ $posts->links() }}--}}
+                {{--</div>--}}
             </div>
             <div class="col-md-3">
                 <div class="panel panel-default">

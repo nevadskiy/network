@@ -5,22 +5,26 @@
         </a>
     </div>
     <div class="media-body">
-        <h4 class="media-heading clearfix">
+        <div class="media-heading clearfix">
             <div class="pull-left">
-                {{ $post->author->username }}
+                <h4>{{ $post->author->username }}
                 <small>{{ $post->created_at->diffForHumans() }}</small>
+                </h4>
             </div>
             <div class="pull-right">
-                @if($post->isLiked)
-                    <a href="{{ route('post.unlike', $post->id) }}" class="btn btn-danger noutline mr-1"><span class="glyphicon glyphicon-heart"></span> {{ $post->likes_count ?: '' }}</a>
-                @else
-                    <a href="{{ route('post.like', $post->id) }}" class="btn btn-default noutline mr-1"><span class="glyphicon glyphicon-heart"></span> {{ $post->likes_count ?: '' }}</a>
-                @endif
+{{--                <like url="{{ route('post.like', $post->id) }}" init-is-liked="{{ $post->isLiked }}" init-likes-count="{{ $post->likes_count }}"></like>--}}
             </div>
-        </h4>
+        </div>
         <p>{{ $post->body }}</p>
+        <div class="clearfix">
+            <div class="edits pull-right">
+                <button class="btn btn-xs btn-primary">Reply</button>
+                <button class="btn btn-xs btn-warning">Edit</button>
+                <button class="btn btn-xs btn-danger">Delete</button>
+            </div>
+        </div>
         @if ($post->replies->count())
-            <hr>
+           <hr>
             @foreach($post->replies as $reply)
                 @include('posts._reply')
             @endforeach

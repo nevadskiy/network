@@ -33,9 +33,9 @@ class ProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function getPosts(User $user)
     {
-        //
+        return $user->posts()->notReply()->latest()->paginate(10);
     }
 
     /**
@@ -51,7 +51,7 @@ class ProfileController extends Controller
 
         return view('profile.show', [
             'user' => $user,
-            'posts' => $user->posts()->withCount('likes')->notReply()->latest()->paginate(10)
+            'posts' => $user->posts()->notReply()->latest()->paginate(10)
         ]);
     }
 

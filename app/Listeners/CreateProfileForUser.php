@@ -3,8 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\UserRegistered;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Session;
 
 class CreateProfileForUser
 {
@@ -27,5 +26,6 @@ class CreateProfileForUser
     public function handle(UserRegistered $event)
     {
         $event->user->profile()->create();
+        Session::flash('flash', 'You successfully registered!');
     }
 }

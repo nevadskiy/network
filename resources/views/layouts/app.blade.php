@@ -36,7 +36,7 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        &nbsp;<li><a href="{{ route('dashboard') }}"><strong>Timeline</strong></a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -75,9 +75,15 @@
         </nav>
 
         @yield('content')
+        <flash message="{{ session('flash') }}"></flash>
     </div>
-
     <!-- Scripts -->
+    <script>
+    window.App = {!! json_encode([
+        'isSignedIn' => Auth::check(),
+        'user' => Auth::user()
+    ]) !!};
+</script>
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

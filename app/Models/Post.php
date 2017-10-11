@@ -10,13 +10,7 @@ class Post extends Model
 
     protected $with = ['replies', 'author'];
 
-//    protected static function boot()
-//    {
-//        parent::boot();
-//        static::addGlobalScope('likesCount', function($query) {
-//            $query->withCount('likes');
-//        });
-//    }
+    protected $appends = ['isLiked', 'likes_count'];
 
     public function scopeNotReply($query)
     {
@@ -61,4 +55,9 @@ class Post extends Model
     {
         return $this->isLiked();
     }
+
+    public function getLikesCountAttribute()
+        {
+            return $this->likes()->count();
+        }
 }

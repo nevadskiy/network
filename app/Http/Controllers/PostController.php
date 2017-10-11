@@ -39,9 +39,13 @@ class PostController extends Controller
             'body' => 'required|max:255'
         ]);
 
-        auth()->user()->posts()->create([
+        $post = auth()->user()->posts()->create([
             'body' => $request->body
         ]);
+
+        if ($request->expectsJson()) {
+            return response($post->load('author'));
+        }
 
         return back();
     }
@@ -53,23 +57,16 @@ class PostController extends Controller
             'body' => 'required|max:255'
         ]);
 
-        $post->replies()->create([
+        $reply = $post->replies()->create([
             'body' => $request->body,
             'user_id' => auth()->id()
         ]);
 
-        return back();
-    }
+        if ($request->expectsJson()) {
+            return response($reply->load('author'));
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return back();
     }
 
     /**
@@ -101,8 +98,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $this->authorize('update', $post);
+
+        $post->delete();
+
+        return response(['Status' => 'Deleted']);
     }
 }
