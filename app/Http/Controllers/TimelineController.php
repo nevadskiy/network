@@ -15,24 +15,15 @@ class TimelineController extends Controller
 
     public function dashboard()
     {
+        return view('dashboard');
+    }
+
+    public function feed() {
         $posts = Post::notReply()->where(function ($query) {
             return $query->where('user_id', auth()->user()->id)
                 ->orWhereIn('user_id', auth()->user()->following()->pluck('user_id'));
-        })->latest()
-            ->paginate(100);
-
-//        $posts = auth()->user()->following()->with(['posts' => function($query) {
-//            $query->notReply()->orderBy('id', 'desc')->get();
-//        }])->get();
-
-//        $timeline->posts->merge(auth()->user());
-
-//        return $posts;
-
-        return view('dashboard', compact('posts'));
-//        return dd($timeline);
-
-//        return Post::notReply()->latest()->where('user_id', )->get();
-
+            })->latest()
+            ->paginate(30);
+        return $posts;
     }
 }

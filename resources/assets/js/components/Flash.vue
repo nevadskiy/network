@@ -1,9 +1,9 @@
 <template>
     <ul class="alert-list">
         <li v-for="message in messages">
-            <div class="alert alert-success alert-dismissible flash">
+            <div  :class="'alert-'+message.s" class="alert alert-dismissible flash">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                {{ message }}
+                {{ message.m }}
             </div>
         </li>
     </ul>
@@ -11,7 +11,7 @@
 
 <script>
     export default {
-        props: ['message'],
+        props: ['message', 'type'],
 
         data() {
             return {
@@ -20,8 +20,8 @@
         },
 
         methods: {
-            flash(message) {
-                this.messages.push(message);
+            flash(message, style) {
+                this.messages.push({m: message, s: style});
                 this.hide();
             },
 
@@ -34,9 +34,9 @@
 
         created() {
             if (this.message) {
-                this.flash(this.message)
+                this.flash(this.message, this.type)
             };
-            window.events.$on('flash', message => this.flash(message));
+            window.events.$on('flash', (message, style) => this.flash(message, style));
         }
     }
 </script>

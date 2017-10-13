@@ -3,8 +3,10 @@
 </template>
 
 <script>
+    import authCheck from '../mixins/authCheck';
     export default {
         props: ['item'],
+        mixins: [authCheck],
 
         data() {
             return {
@@ -22,6 +24,9 @@
 
         methods: {
             toggle() {
+                if (!this.authCheck()) {
+                    return;
+                }
                 if (this.isLiked) {
                     this.unlike();
                 } else {
@@ -30,15 +35,19 @@
             },
 
             like() {
-                axios.post(this.url);
-                this.isLiked = true;
-                this.likesCount++;
+                axios.post(this.url)
+                    .then(() => {
+                        this.isLiked = true
+                        this.likesCount++;
+                    })
             },
 
             unlike() {
-                axios.delete(this.url);
-                this.isLiked = false;
-                this.likesCount--;
+                axios.delete(this.url)
+                    .then(() => {
+                        this.isLiked = false;
+                        this.likesCount--;
+                    });
             }
         }
     }

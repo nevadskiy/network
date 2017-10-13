@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+{{--    {{ dd($errors->all()) }}--}}
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -10,6 +11,22 @@
                 <div class="panel-body">
                     <form class="form-horizontal" method="POST" action="{{ route('register') }}">
                         {{ csrf_field() }}
+
+                        <div class="form-group{{ $errors->has('gender') ? ' has-error' : '' }}">
+                            <label for="gender" class="col-md-4 control-label">Gender</label>
+                            <div class="col-md-6">
+                                <select id="gender" name="gender" class="form-control">
+                                    <option>Select</option>
+                                    <option value="0">Man</option>
+                                    <option value="1">Woman</option>
+                                </select>
+                                @if ($errors->has('gender'))
+                                    <span class="help-block">
+                                        <strong>Select your gender</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
 
                         <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
                             <label for="username" class="col-md-4 control-label">Username</label>

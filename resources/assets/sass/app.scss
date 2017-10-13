@@ -90,6 +90,66 @@
   margin-left: 12px;
 }
 
+.mt-5p {
+  margin-top: 5px;
+}
+
 .noutline {
   outline: none!important;
+}
+
+.text-white {
+  color: white;
+  text-shadow: 2px 2px #39423f;
+  h2 {
+    color: #888
+  }
+}
+
+.avatar {
+  border-radius: 100%;
+  border: 3px solid #ccffee;
+}
+
+.card {
+  .card-body {
+    padding: 0 20px;
+    height: 150px;
+  }
+  .avatar {
+    margin-top: -40px;
+    border-color: #dee4e2;
+  }
+  .btn-follow {
+      margin-top: 6px;
+    }
+  .card-head {
+    color: black;
+    font-size: 18px;
+    font-weight: bold;   
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    margin-bottom: 2px;
+  }
+  .card-span {
+  font-size: 16px;
+  }
+
+}
+
+.not-found {
+    margin-top: 150px;
+    font-size: 8rem;
+    font-weight: 400;
+    line-height: 1.1; 
+}
+.panel a {
+  text-decoration: none;
+}
+
+.navbar-padding {
+  padding: 9px!important;
+}
+
+[v-cloak] {
+  display: none;
 }

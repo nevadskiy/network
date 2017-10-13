@@ -36,7 +36,10 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;<li><a href="{{ route('dashboard') }}"><strong>Timeline</strong></a></li>
+                        <li><a href="{{ route('dashboard') }}"><strong>Timeline</strong></a></li>
+                        <li><a href="{{ route('users.index') }}">Users</a></li>
+                        <li><searcher></searcher></li>
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -46,7 +49,10 @@
                             <li><a href="{{ route('login') }}">Login</a></li>
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
-                            <li{{ Request::path() == 'id' . auth()->id() ? ' class=active' : '' }}><a href="{{ route('profile.show', auth()->id()) }}">{{ auth()->user()->username }}</a></li>
+                            <li{{ Request::path() == 'id' . auth()->id() ? ' class=active' : '' }}><a class="navbar-padding" href="{{ route('profile.show', auth()->id()) }}">
+                                <img src="{{ auth()->user()->avatar_url }}" width="45" class="avatar profile-avatar mr-2" alt="avatar">
+                                {{ auth()->user()->username }}</a>
+                            </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     <span class="glyphicon glyphicon-cog"></span>
@@ -75,15 +81,17 @@
         </nav>
 
         @yield('content')
-        <flash message="{{ session('flash') }}"></flash>
+        
+    <flash></flash>
     </div>
     <!-- Scripts -->
     <script>
-    window.App = {!! json_encode([
-        'isSignedIn' => Auth::check(),
-        'user' => Auth::user()
-    ]) !!};
-</script>
+        window.App = {!! json_encode([
+            'isSignedIn' => Auth::check(),
+            'user' => Auth::user()
+        ]) !!};
+    </script>
     <script src="{{ asset('js/app.js') }}"></script>
+    @include('layouts._flash')
 </body>
 </html>

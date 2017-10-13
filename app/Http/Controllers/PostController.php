@@ -33,15 +33,26 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Post $post = null)
     {
         $this->validate($request, [
             'body' => 'required|max:255'
         ]);
 
-        $post = auth()->user()->posts()->create([
-            'body' => $request->body
-        ]);
+        if (is_null($post)) {
+            $post = auth()->user()->posts()->create([
+                'body' => $request->body,
+                'depth' => 0
+            ]);
+        } else if ($post->depth < 4) {
+            $post = $post->replies()->create([
+                'body' => $request->body,
+                'user_id' => auth()->id(),
+                'depth' => $post->depth + 1
+            ]);
+        } else {
+            return abort(403);
+        }
 
         if ($request->expectsJson()) {
             return response($post->load('author'));
@@ -50,24 +61,24 @@ class PostController extends Controller
         return back();
     }
 
-    public function storeReply(Request $request, Post $post)
-    {
+    // public function storeReply(Request $request, Post $post)
+    // {
 
-        $this->validate($request, [
-            'body' => 'required|max:255'
-        ]);
+    //     $this->validate($request, [
+    //         'body' => 'required|max:255'
+    //     ]);
 
-        $reply = $post->replies()->create([
-            'body' => $request->body,
-            'user_id' => auth()->id()
-        ]);
+    //     $reply = $post->replies()->create([
+    //         'body' => $request->body,
+    //         'user_id' => auth()->id()
+    //     ]);
 
-        if ($request->expectsJson()) {
-            return response($reply->load('author'));
-        }
+    //     if ($request->expectsJson()) {
+    //         return response($reply->load('author'));
+    //     }
 
-        return back();
-    }
+    //     return back();
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -87,9 +98,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $this->authorize('update', $post);
+        $post->body = $request->body;
+        $post->save();
+        return response(['Status' => 'Success']);
     }
 
     /**

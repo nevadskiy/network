@@ -7,18 +7,27 @@ use Illuminate\Http\Request;
 
 class FollowersController extends Controller
 {
+    protected function protection($user)
+    {
+        if ($user->id == auth()->id()) {
+            return abort(403);
+        }
+    }
+
     public function store(User $user)
     {
+        $this->protection($user);
+
         $user->follow();
-        return back();
+        return response(['Status' => 'Success']);
     }
 
     public function destroy(User $user)
     {
-        //policy to denay followin myself
+        $this->protection($user);
 
         $user->unfollow();
 
-        return back();
+        return response(['Status' => 'Success']);
     }
 }

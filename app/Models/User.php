@@ -18,6 +18,10 @@ class User extends Authenticatable
         'username', 'password',
     ];
 
+    protected $with = ['profile'];
+
+    protected $appends = ['avatar_url', 'path', 'isFollowed'];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -80,5 +84,18 @@ class User extends Authenticatable
     public function isMe()
     {
         return $this->id == auth()->id();
+    }
+
+    public function getAvatarUrl() {
+        return asset('storage/avatars/' . $this->profile->avatar);
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        return $this->getAvatarUrl();
+    }
+
+    public function getPathAttribute() {
+        return '/id' . $this->id;
     }
 }

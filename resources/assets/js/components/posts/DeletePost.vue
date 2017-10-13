@@ -53,10 +53,15 @@
 
 		methods: {
 			destroy() {
-				axios.delete('/api/post/' + this.id + '/delete');
+				axios.delete('/api/post/' + this.id + '/delete')
+                    .then(() => {
+                        this.$emit('deleted', this.id);
+                        flash('Post deleted!');
+                    })
+                    .catch(response => {
+                        flash(response.message, 'danger');
+                    });
                 $('#delete-post').modal('hide');
-                this.$emit('deleted', this.id);
-				flash('Post deleted!');
 			}
 		}
 

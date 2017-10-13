@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
-    protected $fillable = ['user_id'];
-
-    protected $with = ['user'];
+    protected $fillable = ['user_id', 'gender', 'first_name', 'last_name', 'avatar'];
 
     public function getFullName()
     {

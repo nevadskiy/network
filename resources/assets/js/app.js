@@ -16,15 +16,17 @@ window.Vue = require('vue');
  */
 window.events = new Vue();
 
-window.flash = function (message) {
-    window.events.$emit('flash', message);
+window.flash = function (message, style = 'success') {
+    window.events.$emit('flash', message, style);
 };
 
 // Vue.component('like', require('./components/Like.vue'));
 
 Vue.component('flash', require('./components/Flash.vue'));
-
-Vue.component('posts', require('./components/Posts.vue'));
+Vue.component('searcher', require('./components/Searcher.vue'));
+Vue.component('posts', require('./components/posts/Posts.vue'));
+Vue.component('follows', require('./components/follows/Follows.vue'));
+Vue.component('follow-button', require('./components/follows/FollowButton.vue'));
 
 // Vue.component('post', require('./components/Post.vue'));
 

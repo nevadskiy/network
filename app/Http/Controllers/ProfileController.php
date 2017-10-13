@@ -14,7 +14,8 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::paginate(15);
+        return view('profile.index', compact('users'));
     }
 
     /**
@@ -46,9 +47,6 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-//        return $user->posts()->withCount('likes')->notReply()->latest()->paginate(10);
-//        return user()
-
         return view('profile.show', [
             'user' => $user,
             'posts' => $user->posts()->notReply()->latest()->paginate(10)

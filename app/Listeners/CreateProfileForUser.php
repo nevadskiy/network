@@ -24,8 +24,11 @@ class CreateProfileForUser
      * @return void
      */
     public function handle(UserRegistered $event)
-    {
-        $event->user->profile()->create();
-        Session::flash('flash', 'You successfully registered!');
+    {        
+        $event->user->profile()->create([
+            'gender' => $event->gender,
+            'avatar' => 'default/' . ((bool) $event->gender ? 'girl.png' : 'boy.png')
+        ]);
+        Session::flash('success', 'You successfully registered!');
     }
 }

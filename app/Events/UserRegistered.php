@@ -15,8 +15,9 @@ class UserRegistered
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($user, $gender)
     {
         $this->user = $user;
+        $this->gender = $gender;
     }
 }
