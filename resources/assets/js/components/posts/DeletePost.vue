@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" id="delete-post" role="dialog">
+    <div class="modal fade" id="delete-modal" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -8,19 +8,20 @@
                 </div>
                 <div class="modal-body">
                     <div class="media-left">
-                        <a href="#">
-                        <img alt="64x64" class="media-object" style="width: 64px; height: 64px;" src="/storage/avatars/default/boy.png" data-holder-rendered="true">
+                        <a :href="item.author.path">
+                        <img alt="64x64" class="media-object" style="width: 64px; height: 64px;" :src="item.author.avatar_url" data-holder-rendered="true">
                     </a>
                     </div>
                     <div class="media-body">
-                        <div class="media-heading clearfix">
+                        <div class="media-heading clearfix mb-0">
                             <div class="pull-left">
-                                <h4 class="mt-0">{{ username }}
-                                <small>{{ created_at }}</small>
-                            </h4>
+                                    <h4 class="mt-0"><a class="hlink" :href="item.author.path">{{ item.author.username }}</a></h4>
+                                </div>
+                            <div class="pull-right text-right">
+                                <p class="mb-0" <span v-if="updated" class="label label-default mt-0 text-right">Updated</span> {{ updated_at }}</p>
                             </div>
                         </div>
-                        <p>{{ body }}</p>
+                        <p class="post-body">{{ item.body }}</p> 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -33,35 +34,46 @@
 </template>
 
 <script>
-	export default {
-		props: ['postItem'],
+    import updated_at from '../../mixins/updated_at';
 
-		computed: {
-			username() {
-				return this.postItem.username ? this.postItem.username : ''
-			},
-			body() {
-				return this.postItem.body ? this.postItem.body : '';
-			},
-			created_at() {
-				return this.postItem.created_at ? this.postItem.created_at : '';
-			},
-			id() {
-				return this.postItem.id ? this.postItem.id : '';
-			}
-		},
+	export default {
+        mixins: [updated_at],
+
+		props: ['bus'],
+
+        data() {
+            return {
+                item: {
+                    updated_at: 0,
+                    created_at: 0,
+                    body: '',
+                    author: {
+                        username: '',
+                        avatar: '',
+                        path: '',
+                    }
+                }
+            }
+        },
+
+        created() {
+            this.bus.$on('deleteModal', item => {
+                $('#delete-modal').modal();
+                this.item = item;
+            });
+        },
 
 		methods: {
 			destroy() {
-				axios.delete('/api/post/' + this.id + '/delete')
+				axios.delete('/api/post/' + this.item.id )
                     .then(() => {
-                        this.$emit('deleted', this.id);
-                        flash('Post deleted!');
+                        this.bus.$emit('deleted', this.item.id);
+                        flash('Post has been deleted!', 'info');
                     })
                     .catch(response => {
                         flash(response.message, 'danger');
                     });
-                $('#delete-post').modal('hide');
+                $('#delete-modal').modal('hide');
 			}
 		}
 

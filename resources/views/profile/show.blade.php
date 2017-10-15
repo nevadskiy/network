@@ -21,8 +21,8 @@
                     <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="pull-left">
-                            <a href="" class="btn btn-link"><strong>Following: @{{ followingsCount }} </strong></a>
-                            <a href="" class="btn btn-link"><strong>Followers: @{{ followersCount }}</strong></a>
+                            <a href="{{ route('user.following', $user->id) }}" class="btn btn-link"><strong>Following: @{{ followingsCount }} </strong></a>
+                            <a href="{{ route('user.followers', $user->id) }}" class="btn btn-link"><strong>Followers: @{{ followersCount }}</strong></a>
                         </div>
                         <div class="pull-right">
                             @if (!$user->isMe())
@@ -38,7 +38,7 @@
           </div>
             <div class="row">
 
-   <div class="col-md-3 col-md-offset-1">
+            <div class="col-md-3 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="panel-heading">Foobar panel</div>
                     <div class="panel-body">
@@ -47,32 +47,33 @@
                 </div>
             </div>
             <div class="col-md-7">
-               <posts inline-template :link="'/api/id' + {{ $user->id }} + '/posts'" :init-posts-count="{{ $posts->total() }}">
-                <!-- {{ $posts->total() }} -->
+               <posts inline-template :link="'/api/id' + {{ $user->id }} + '/posts'" :init-posts-count="{{ $postCount }}">
                    <div class="panel panel-default">
                        <div class="panel-heading"><a href="" class="btn btn-link"><strong>Posts: <span v-text="postCounter"></span></strong></a></div>
                        <div class="panel-body">
                            @if($user->isMe())
                                <new-post @posted="add"></new-post>
+                               <hr>
                            @endif
                            <ul class="media-list">
-                               <div v-for="post in posts" :key="post.id">
-                                <hr>
-                                <post :item="post" @deleted="remove"></post>
-                            </div>
-                            <!-- <delete-post @deleted="remove" :post-item="modalDelete"></delete-post> -->
-                               {{--@forelse($posts as $post)--}}
-                                   {{--<hr>--}}
-                                   {{--@include('posts._post')--}}
-                               {{--@empty--}}
-                                   {{--<p>There are no posts by this user.</p>--}}
-                               {{--@endforelse--}}
+                               <template v-if="posts.length">
+                                   <div v-for="(post, index) in posts" :key="post.id">
+                                    <post :item="post" :bus="bus"></post>
+                                 <hr>
+                                </div>
+                               </template>
+                               <template v-else>
+                                 <div style="min-height: 350px; padding-top: 175px;" class="text-center">
+                                   <img src="{{ asset('img/ajax-loader.gif') }}" alt="">
+                                 </div>
+                               </template>
                            </ul>
                        </div>
+                       <!-- <edit-post :bus="bus"></edit-post> -->
+                       <delete-post :bus="bus"></delete-post>
                    </div>
                </posts>
             </div>
-
         </div>
     </div>
 @endsection

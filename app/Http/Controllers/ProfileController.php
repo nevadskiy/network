@@ -15,7 +15,8 @@ class ProfileController extends Controller
     public function index()
     {
         $users = User::paginate(15);
-        return view('profile.index', compact('users'));
+        $page = 'Users';
+        return view('profile.index', compact('users', 'page'));
     }
 
     /**
@@ -49,7 +50,8 @@ class ProfileController extends Controller
     {
         return view('profile.show', [
             'user' => $user,
-            'posts' => $user->posts()->notReply()->latest()->paginate(10)
+            'postCount' => $user->notReplyPosts->count()
+            // 'posts' => $user->load('notReplyPosts')->latest()->paginate(10)
         ]);
     }
 

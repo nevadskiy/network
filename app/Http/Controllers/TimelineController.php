@@ -23,7 +23,8 @@ class TimelineController extends Controller
             return $query->where('user_id', auth()->user()->id)
                 ->orWhereIn('user_id', auth()->user()->following()->pluck('user_id'));
             })->latest()
-            ->paginate(30);
+            ->paginate(300);
+            // ->paginate(30);
         return $posts;
     }
 }

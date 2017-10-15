@@ -45,6 +45,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+    public function notReplyPosts() {
+        return $this->hasMany(Post::class)->notReply();
+    }
 
     public function followers()
     {

@@ -3,7 +3,8 @@
 		<li class="dropdown" :class="{'open': open}">
           	<div class="form-group">
           		<div class="searcher">
-          			<input type="text" v-model="data" class="form-control" :class="{'input-search': open}" placeholder="Search for users...">
+          			<input type="text" v-model="data" class="form-control form-search" :class="{'input-search': open}" placeholder="Users search...">
+          			<span v-show="data.length" @click="clear" class="input-icon white glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
           		</div>
         	</div>
           	<ul class="dropdown-menu no-br">
@@ -62,6 +63,10 @@
 					.then(response => {
 						this.results = response.data;
 					})
+			},
+			clear() {
+				console.log('cleared');
+				this.data = '';
 			}
 		}
 	}
@@ -77,5 +82,13 @@
 	}
 	.searcher {
 		padding: 0 15px;
+	}
+	.form-search {
+		padding: 0 25px 0 0!important;	
+	}
+	.input-icon {
+	  padding-right: 10px;
+	  cursor: pointer;
+	  pointer-events: initial;
 	}
 </style>

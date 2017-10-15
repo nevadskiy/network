@@ -30,4 +30,18 @@ class FollowersController extends Controller
 
         return response(['Status' => 'Success']);
     }
+
+    public function followers(User $user)
+    {
+        $users = $user->followers()->paginate(15);
+        $page =  $user->username . '\'s followers';
+        return view('profile.index', compact('users', 'page'));
+    }
+
+    public function following(User $user)
+    {
+        $users = $user->following()->paginate(15);
+        $page =  $user->username . ' is following';
+        return view('profile.index', compact('users', 'page'));
+    }
 }

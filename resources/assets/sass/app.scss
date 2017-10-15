@@ -10,6 +10,10 @@
 //Bootswatch
 @import "bootswatch";
 
+html {
+    overflow-y:scroll;
+}
+
 .mb-0 {
   margin-bottom: 0em;
 }
@@ -102,19 +106,35 @@
   color: white;
   text-shadow: 2px 2px #39423f;
   h2 {
-    color: #888
+    color: #d0cece;
   }
 }
 
 .avatar {
   border-radius: 100%;
-  border: 3px solid #ccffee;
+  border: 2px solid grey;
+}
+
+.white {
+  color: white;
+}
+
+textarea {
+  resize: none;
+}
+
+.hlink,
+.hlink:hover {
+  color: #444;
 }
 
 .card {
   .card-body {
     padding: 0 20px;
     height: 150px;
+    img {
+      border: 3px solid white;
+    }
   }
   .avatar {
     margin-top: -40px;
@@ -128,10 +148,12 @@
     font-size: 18px;
     font-weight: bold;   
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    margin-bottom: 2px;
+    margin-bottom: 2px; 
+    overflow: hidden;
   }
   .card-span {
   font-size: 16px;
+  color: #444;
   }
 
 }

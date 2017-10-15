@@ -15,7 +15,7 @@
                                   <hr>
                                     <h4 class="text-center">Your feed is empty yet. <br> <a href="{{ route('users.index') }}">Start follow somebody</a></h4>
                                 </div>
-                               <div v-for="post in posts" :key="post.id">
+                               <div v-else v-for="post in posts" :key="post.id">
                                 <hr>
                                 <post :item="post" @deleted="remove"></post>
                             </div>

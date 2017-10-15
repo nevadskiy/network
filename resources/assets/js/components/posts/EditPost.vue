@@ -10,7 +10,6 @@
                     <div class="form-group" :class="{'has-error': hasError }">
                         <textarea id="edit-post-field" class="form-control" autofocus v-model="inputData"></textarea>
                         <span v-text="lengthValidation" class="help-block inline-block ml-2"></span>
-                        <span v-text="postId" class="help-block inline-block ml-2"></span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
