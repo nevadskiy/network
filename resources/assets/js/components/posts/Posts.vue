@@ -1,11 +1,11 @@
 <script>
     import Post from './Post.vue';
     import NewPost from './NewPost.vue';
-    // import EditPost from './EditPost.vue';
+    import EditPost from './EditPost.vue';
     import DeletePost from './DeletePost.vue';
 
     export default {
-        components: { Post, NewPost, DeletePost },
+        components: { Post, NewPost, DeletePost, EditPost },
         props: ['link', 'initPostsCount'],
 
         data() {
@@ -13,44 +13,49 @@
                 bus: new Vue(),
                 postCounter: this.initPostsCount,
                 posts: [],
-                fetched: false,
-                modalDelete: [],
+
+                resource: this.link,
+                loading: true
             }
-        },
+        },  
     
         computed: {
-            isEmptyFeedback() {
-                return this.fetched && !this.posts.length;
-            },
             canUpdate() {
                 return window.App.isSignedIn && this.item.user_id == window.App.user.id;
             },
         },
 
-        // watch: {
-        //     posts() {
-        //         let temp = this.posts;
-        //         this.posts = [];
-        //         this.posts = temp;
-        //     }
-        // },
-
         created() {
-            this.fetch();
+            this.load();
             this.bus.$on('deleted', id => this.remove(id));
+            window.addEventListener('scroll', this.handleScroll);
         },
 
         methods: {
-            fetch() {
-                axios.get(this.link)
+            load() {
+                this.loading = true;
+                axios.get(this.resource)
                     .then(response => {
                         this.refresh(response);
-                        this.fetched = true;
+                        this.loading = false;
+                    })
+                    .catch(error => {
+                        console.log(error);
                     });
             },
 
+            handleScroll(event) {
+                let diffOffset = document.body.offsetHeight - window.innerHeight,
+                    scrolled = window.scrollY;
+
+                if (diffOffset <= scrolled && !this.loading && this.resource) {
+                    this.load();
+                }
+            },
+
             refresh(response) {
-                this.posts = response.data.data;
+                this.posts = this.posts.concat(response.data.data);
+                this.resource = response.data.next_page_url;
             },
 
             add(item) {

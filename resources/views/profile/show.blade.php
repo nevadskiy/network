@@ -32,21 +32,10 @@
                     </div>
                 </div>
               </follows>
-
-
             </div>
           </div>
             <div class="row">
-
-            <div class="col-md-3 col-md-offset-1">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Foobar panel</div>
-                    <div class="panel-body">
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-7">
+            <div class="col-md-offset-2 col-md-8">
                <posts inline-template :link="'/api/id' + {{ $user->id }} + '/posts'" :init-posts-count="{{ $postCount }}">
                    <div class="panel panel-default">
                        <div class="panel-heading"><a href="" class="btn btn-link"><strong>Posts: <span v-text="postCounter"></span></strong></a></div>
@@ -56,20 +45,16 @@
                                <hr>
                            @endif
                            <ul class="media-list">
-                               <template v-if="posts.length">
-                                   <div v-for="(post, index) in posts" :key="post.id">
-                                    <post :item="post" :bus="bus"></post>
-                                 <hr>
-                                </div>
-                               </template>
-                               <template v-else>
-                                 <div style="min-height: 350px; padding-top: 175px;" class="text-center">
-                                   <img src="{{ asset('img/ajax-loader.gif') }}" alt="">
-                                 </div>
-                               </template>
+                               <div v-for="(post, index) in posts" :key="post.id">
+                                  <post :item="post" :bus="bus"></post>
+                                  <hr v-if="posts.length - 1 !== index">
+                               </div>
+                              <div v-if="loading" style="min-height: 150; padding-top: 75px;" class="text-center">
+                                  <img src="{{ asset('img/ajax-loader.gif') }}" alt="">
+                              </div>
                            </ul>
                        </div>
-                       <!-- <edit-post :bus="bus"></edit-post> -->
+                       <edit-post :bus="bus"></edit-post>
                        <delete-post :bus="bus"></delete-post>
                    </div>
                </posts>

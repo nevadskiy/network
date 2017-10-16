@@ -4,23 +4,24 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-
-                <posts v-cloak inline-template :profile="1"  link="/api/feed" :init-posts-count="1">
+              <posts inline-template link="/api/feed">
                    <div class="panel panel-default">
                        <div class="panel-heading"><a href="" class="btn btn-link"><strong>Latest posts</strong></a></div>
                        <div class="panel-body">
                            <new-post @posted="add"></new-post>
+                           <hr>
                            <ul class="media-list">
-                                <div v-if="isEmptyFeedback">
-                                  <hr>
-                                    <h4 class="text-center">Your feed is empty yet. <br> <a href="{{ route('users.index') }}">Start follow somebody</a></h4>
-                                </div>
-                               <div v-else v-for="post in posts" :key="post.id">
-                                <hr>
-                                <post :item="post" @deleted="remove"></post>
-                            </div>
+                               <div v-for="(post, index) in posts" :key="post.id">
+                                  <post :item="post" :bus="bus"></post>
+                                  <hr v-if="posts.length - 1 !== index">
+                               </div>
+                              <div v-if="loading" style="min-height: 150; padding-top: 75px;" class="text-center">
+                                  <img src="{{ asset('img/ajax-loader.gif') }}" alt="">
+                              </div>
                            </ul>
                        </div>
+                       <edit-post :bus="bus"></edit-post>
+                       <delete-post :bus="bus"></delete-post>
                    </div>
                </posts>
             </div>

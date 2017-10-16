@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" :id="'edit-post'+postId" role="dialog">
+    <div class="modal fade" id="edit-modal" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -24,13 +24,14 @@
 <script>
     import postFormValidation from '../../mixins/postFormValidation';
 	export default {
-        mixins: [postFormValidation],
+        props: ['bus'],
 
-		props: ['postBody', 'postId'],
+        mixins: [postFormValidation],
 
         data() {
             return {
-                inputData: this.postBody,
+                inputData: '',
+                id: ''
             }
         },
         computed: {
@@ -39,34 +40,28 @@
             }
         },
 
+        created() {
+            this.bus.$on('editModal', (body, id) => {
+                this.inputData = body;
+                this.id = id;
+                $('#edit-modal').modal();
+            });
+        },
+
 		methods: {
 			update() {
-                console.log(this.postId);
                 if (this.disabled || this.notChanged) {
                     return this.isValidError = true;
                 }
-                axios.put('/api/post/' + this.postId, {'body': this.inputData})
+                axios.put('/api/post/' + this.id, {'body': this.inputData})
                     .then(() => {
-                        this.$emit('edited', this.inputData);
+                        this.bus.$emit('edited', this.inputData);
                         flash('Post changed', 'warning');
                     })
                     .catch(() => {
                         flash('Post has not been updated', 'danger');
                     });
-
-
-
-                // let that = this;
-                // console.log('emited test');
-                // console.log(this.$parent.$children.filter(function(child) {
-                //    return true;
-                //    // return child.id == 103;
-                // }));
-                // this.$parent.$emit('test');
-				// axios.delete('/api/post/' + this.id + '/delete');
-                // $('#delete-post').modal('hide');
-                // this.$emit('deleted', this.id);
-				// flash('Post deleted!');
+                $('#edit-modal').modal('hide');
 			}
 		}
 

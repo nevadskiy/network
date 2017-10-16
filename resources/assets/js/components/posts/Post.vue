@@ -1,5 +1,5 @@
 <template>
-    <div class="media" :class="{'hidden-xs' : (item.depth > 1)}">
+    <div ref="post" class="media" :class="{'hidden-xs' : (item.depth > 1)}">
         <div class="media-left">
             <a :href="item.author.path">
                 <img alt="64x64" class="media-object avatar" style="width: 64px; height: 64px;" :src="item.author.avatar_url" data-holder-rendered="true">
@@ -19,12 +19,12 @@
             </div>
             <div class="clearfix">
                 <div class="pull-left">
-                    <button @click="replyingToggle" v-if="!replying && item.depth < 4" class="btn btn-xs btn-primary mr-1">Reply</button>
                     <like :item="item"></like>
+                    <button @click="replyingToggle" v-if="!replying && item.depth < 4" class="btn btn-xs btn-primary mr-1">Reply</button>
                 </div>
                 <div class="pull-right">
-                    <button v-if="canUpdate" @click="toggleEditModal" class="btn btn-xs btn-warning">Edit</button>
-                    <button v-if="canDelete" @click="toggleDeleteModal" class="btn btn-xs btn-danger">Delete</button>
+                    <button title="Edit"  v-if="canUpdate" @click="toggleEditModal" class="btn btn-xs btn-warning">Edit</button>
+                    <button title="Delete" v-if="canDelete" @click="toggleDeleteModal" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
                 </div>
             </div>
             <reply-form :itemId="item.id" v-if="replying" @toggle="replying = false" @success="replyAdded"></reply-form>
@@ -57,7 +57,7 @@
             }
         },
 
-        created() {            
+        mounted: function () {
             this.canDeleteCheck(this);
         },
 
@@ -69,13 +69,16 @@
 
         methods: {
             canDeleteCheck(element) {
-                    if(!window.App.isSignedIn || typeof element.canUpdate == 'undefined') {
+                    if(!window.App.isSignedIn) {
                         return false;
                     }
                     if (element.canUpdate == true) {
                         return this.canDelete = true;
                     }
-                    return this.canDeleteCheck(element.$parent);
+                    if (this.$parent.$refs.post) {
+                        return this.canDeleteCheck(element.$parent);
+                    }
+                    return false;
                 },
 
             replyAdded(reply) {
@@ -88,7 +91,8 @@
                 this.replying = true;
             },
             toggleEditModal() {
-                $('#edit-post'+this.item.id).modal('toggle');
+                this.bus.$emit('editModal', this.body, this.item.id);
+                this.bus.$once('edited', (body) => this.update(body));
             },
             toggleDeleteModal() {
                 this.bus.$emit('deleteModal', this.item);
@@ -96,16 +100,6 @@
             update(body) {
                 this.body = body;
                 this.updated = true;
-                this.toggleEditModal();
-            },
-            remove(index) {
-                function filterData(data, id) {
-                  var r = data.filter(function(o) {
-                    if (o.children) o.children = filterData(o.children, id);
-                    return o.id != id
-                  })
-                  return r;
-                }
             }
         }
     }

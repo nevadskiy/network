@@ -36,7 +36,6 @@ export default {
             },
 
             follow() {
-                console.log('follow...');
                 axios.post('/api/follow/' + this.userId)
                     .then(() => {
                         this.isFollowed = true;

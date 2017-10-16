@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Likable;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    use Likable;
+
     protected $fillable = ['body', 'user_id', 'depth'];
 
     protected $with = ['replies', 'author'];
@@ -31,38 +34,4 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
-    public function likes()
-    {
-        return $this->belongsToMany(User::class, 'likes', 'post_id', 'user_id');
-    }
-
-    public function like()
-    {
-        if (!$this->isLiked()) {
-            $this->likes()->attach(auth()->id());
-        }
-    }
-
-    public function unlike()
-    {
-        if ($this->isLiked()) {
-            $this->likes()->detach(auth()->id());
-        }
-    }
-
-    public function isLiked()
-    {
-        return $this->likes()->where('user_id', auth()->id())->exists();
-    }
-
-    public function getIsLikedAttribute()
-    {
-        return $this->isLiked();
-    }
-
-    public function getLikesCountAttribute()
-        {
-            return $this->likes()->count();
-        }
 }
